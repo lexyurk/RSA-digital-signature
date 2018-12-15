@@ -37,6 +37,16 @@
             size: self.size
             radius: [0,10, 10, 0]
 
+<NavButton@Button>
+    background_color: 0, 0, 0, 0
+    color: (.95, .95, .95)
+    canvas.before:
+        Color:
+            rgba: (.21, .21, .21, 1) if self.state != 'normal' or self.disabled else (.26, .26, .26, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 ScreenManagement:
     transition: FadeTransition()
     MainWindow:
@@ -46,6 +56,7 @@ ScreenManagement:
     name: "main"
     cols: 2
 
+    # Left navigation
     FloatLayout:
         id: navigation
         size_hint: 0.4, root.height
@@ -72,23 +83,27 @@ ScreenManagement:
             size_hint_x: 0.7
             pos_hint: {"x": 0.15, "y": 0.35}
 
+        # Open file button
         RoundedButton:
             pos_hint: {"x": 0.15, "top": 0.75}
             text: root.regular_font("Open file..")
             markup: True
             on_release: root.show_load()
 
+        # Settings button
         RoundedButton:
             pos_hint: {"x": 0.15, "top": 0.3}
             text: "Key settings"
             on_release: app.root.current = "settings"
 
+        # Exit button
         RoundedButton:
             text: root.regular_font("Exit")
             markup: True
             pos_hint: {"x": 0.15, "top": 0.1}
             on_release: app.stop()
 
+    # Main part of window
     BoxLayout:
         id: content
         canvas:
@@ -98,9 +113,36 @@ ScreenManagement:
                 size: content.size
                 pos: content.pos
 
+        # Top navigation
+        BoxLayout:
+            orientation: 'horizontal'
+            id: top_navigation
+            size_hint: 1, 0.075
+            pos_hint: {'x': 0, 'top': 1}
+            anchor_y: 'top'
+            anchor_x: 'center'
+            canvas:
+                Color:
+                    rgba: root.dark_color_lighter
+                Rectangle:
+                    size: top_navigation.size
+                    pos: top_navigation.pos
+
+            NavButton:
+                text: "Create signature"
+                disabled: root._create_signature
+                on_release: root.create_signature = True
+
+            NavButton:
+                text: "Check signature"
+                disabled: root._check_signature
+                on_release: root.check_signature = True
+
 <SettingKeys>:
     name: "settings"
     cols: 2
+
+    # Left navigation
     FloatLayout:
         id: navigation
         size_hint: 0.4, root.height
@@ -127,17 +169,20 @@ ScreenManagement:
             size_hint_x: 0.7
             pos_hint: {"x": 0.15, "y": 0.35}
 
+        # Open file button
         RoundedButton:
             pos_hint: {"x": 0.15, "top": 0.75}
             text: root.regular_font("Open file..")
             markup: True
             on_release: root.show_load()
 
+        # Return button
         RoundedButton:
             pos_hint: {"x": 0.15, "top": 0.3}
             text: "Return"
             on_release: app.root.current = "main"
 
+        # Exit button
         RoundedButton:
             text: root.regular_font("Exit")
             markup: True

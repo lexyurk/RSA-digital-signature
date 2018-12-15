@@ -3,7 +3,7 @@ import os
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, BooleanProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
@@ -154,10 +154,30 @@ class MainWindow(Windows, Screen):
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
     text_input = ObjectProperty(None)
+    _create_signature = BooleanProperty(True)
+    _check_signature = BooleanProperty(False)
 
     def __init__(self, *args, **kwargs):
         self.input_file_name = ''
         super().__init__(*args, **kwargs)
+
+    @property
+    def create_signature(self):
+        return self._create_signature
+
+    @create_signature.setter
+    def create_signature(self, value):
+        self._create_signature = value
+        self._check_signature = not value
+
+    @property
+    def check_signature(self):
+        return self._check_signature
+
+    @check_signature.setter
+    def check_signature(self, value):
+        self._check_signature = value
+        self._create_signature = not value
 
 
 class SettingKeys(Windows, Screen):
