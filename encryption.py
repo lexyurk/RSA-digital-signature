@@ -8,8 +8,9 @@ class Encryption:
     Generating keys, making digital signature and checking signature on validness
     """
 
-    def __init__(self, keys=None):
-        self.keys = keys
+    def __init__(self):
+        self.keys = dict()
+        self.is_all_keys = False
 
     def set_keys(self, key_size=1024, **kwargs):
         """
@@ -36,10 +37,6 @@ class Encryption:
 
         self.keys['n'] = self.keys['p'] * self.keys['q']
         self.keys['fn'] = (self.keys['p'] - 1) * (self.keys['q'] - 1)
-
-        public_private_keys = self.generate_keys(self.keys['fn'], self.keys.get('e'), self.keys.get('d'), key_size)
-        self.keys['e'] = public_private_keys['e']
-        self.keys['d'] = public_private_keys['d']
 
         return self.keys
 
@@ -75,19 +72,48 @@ class Encryption:
             return False
         return True
 
-    def generate_keys(self, _euler, _public_key=0, _private_key=0, key_size=1024):
+    def generate_keys(self, _euler=0, _public_key=0, _private_key=0, key_size=1024):
+        """
+        Generating public / private keys
+        :param _euler: result of euler function
+        :param _public_key: public key value
+        :param _private_key: private key value
+        :param key_size: size of key if it's not generated (in bits)
+        :return: dictionary, that includes public ('e') and private ('d') keys
+        """
+        if not _euler:
+            try:
+                _euler = (self.keys['p'] - 1) * (self.keys['q'] - 1)
+            except Exception:
+                raise KeyError("P and Q keys are not defined.")
+        # If all keys are generated
         if _public_key and _private_key:
             return {'e': _public_key, 'd': _private_key}
+        # if only public key is generated
         elif _public_key:
-            _private_key = extended_gcd(_public_key, euler)[1]
+            _private_key = extended_gcd(_public_key, _euler)
+            _private_key = _private_key[1] if _private_key[1] > 0 else _private_key[2]
+        # if only private key is generated
         elif _private_key:
-            _public_key = extended_gcd(_private_key, euler)[1]
+            _public_key = extended_gcd(_private_key, _euler)[1]
+        # if no keys were generated
+        # generating one key and recursively call function with generated key
         else:
             while True:
                 _public_key = randrange(1, key_size)
-                if gcd(_public_key, euler) == 1:
-                    return self.generate_keys(euler, _public_key)
+                if gcd(_public_key, _euler) == 1:
+                    return self.generate_keys(_euler, _public_key)
         return {'e': _public_key, 'd': _private_key}
+
+    def generate_key(self, key, key_size=1024):
+        """
+        Generating large prime key (p or q) and setting this key up
+        :param key: string, includes 'p' or 'q'
+        :param key_size: size of key to generate (in bits), default 1024
+        :return: generated key
+        """
+        self.keys[key] = generate_large_prime(key_size)
+        return self.keys[key]
 
     @staticmethod
     def _open_file_binary(filename):
