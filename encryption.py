@@ -63,12 +63,13 @@ class Encryption:
         :return: True if all keys are valid, else False
         """
         keys_to_check = ['p', 'q', 'n', 'fn', 'e', 'd']
-        is_all_keys = True
+        self.is_all_keys = True
         for key in keys_to_check:
             if key not in keys.keys():
-                is_all_keys = False
-        if not is_all_keys or not self.check_public_private_key(keys['e'], keys['fn']) \
+                self.is_all_keys = False
+        if not self.is_all_keys or not self.check_public_private_key(keys['e'], keys['fn']) \
                 or not self.check_public_private_key(keys['d'], keys['fn']):
+            self.is_all_keys = False
             return False
         return True
 
