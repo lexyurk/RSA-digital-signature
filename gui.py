@@ -139,6 +139,11 @@ class MainWindow(Windows, Screen):
         Clock.schedule_once(self.update_label)
 
     def update_label(self, value):
+        """
+        Updating labels after opening main window
+        :param value: unused, but need to be transfered
+        :return: none
+        """
         self.ids.file_status_label.text = '[font=OpenSans-Light]File status: [/font]'
         self.ids.file_status_label.text = self.ids.file_status_label.text + '[font=OpenSans-Regular]File is not opened.[/font]' if not Windows.input_file_name \
             else f'[font=OpenSans-Regular]Opened file: {Windows.input_file_name.split("/")[-1]}[/font]'
@@ -182,6 +187,11 @@ class MainWindow(Windows, Screen):
         self.update_label(1)
 
     def sign_file(self, signature_input):
+        """
+        Creating file digital signature
+        :param signature_input: signature input text field
+        :return: none
+        """
         if Windows.are_keys_set and Windows.input_file_name:
             try:
                 signature = encrypt.get_signature_private(Windows.input_file_name)
@@ -198,6 +208,13 @@ class MainWindow(Windows, Screen):
             self._popup.open()
 
     def is_signature_valid(self, _signature, _public_key, _n_key):
+        """
+        Handling 'Check signature' button. Checking if file signature is valid
+        :param _signature: signature text field
+        :param _public_key: public key text field
+        :param _n_key: n key text field
+        :return: None
+        """
         try:
             signature = int(_signature.text)
             e_key = int(_public_key.text)
@@ -347,5 +364,3 @@ Factory.register('SaveDialog', cls=SaveDialog)
 
 if __name__ == "__main__":
     RSASignatureApp().run()
-    # print(Windows.convert_to_rgb(244, 244, 244))
-    # print(Windows.convert_to_rgb(23, 55, 83))
