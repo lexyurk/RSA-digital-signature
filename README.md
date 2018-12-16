@@ -27,3 +27,8 @@ Executable file. Showing application gui. It's handling all interactions in gui
 
 #### rsasignature.kv
 Kivy file for creating gui elements. Implements style and position of elements in gui.
+
+### Screenshots
+![Main window](https://github.com/alj06ka/RSA-digital-signature/blob/master/Screenshots/1.png)
+![Setting keys menu](https://github.com/alj06ka/RSA-digital-signature/blob/master/Screenshots/2.png)
+![Checking signature](https://github.com/alj06ka/RSA-digital-signature/blob/master/Screenshots/3.png)
