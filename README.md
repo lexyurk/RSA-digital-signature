@@ -16,14 +16,14 @@ To start using this application, you should have installed:
 
 ### File description
 
-####primes.py
+#### primes.py
 Generating long prime numbers, checking if number is prime, calculating gcd of two files.
     
-####encryption.py
+#### encryption.py
 Creating RSA public/private keys, checking if this keys are valid, creating and checking digital signatures.
 
-####gui.py
+#### gui.py
 Executable file. Showing application gui. It's handling all interactions in gui
 
-####rsasignature.kv
+#### rsasignature.kv
 Kivy file for creating gui elements. Implements style and position of elements in gui.
